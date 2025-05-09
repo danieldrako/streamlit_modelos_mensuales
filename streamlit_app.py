@@ -22,7 +22,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # --- Título
-st.title("🔢 Comparador de modelos de predicción mensual")
+st.title("📅 Comparador de modelos de predicción mensual")
 
 # --- Sidebar: selección múltiple de modelos
 st.sidebar.subheader("Modelos a mostrar:")
@@ -165,6 +165,24 @@ fig_modelos.update_layout(
     xaxis_title="Fecha",
     yaxis_title="Total mensual",
     hovermode="x unified",
-    height=550
+    height=750
 )
+
 st.plotly_chart(fig_modelos, use_container_width=True, key="grafico_comparacion_modelos")
+# --- Explicación para el cliente ---
+st.markdown("""
+### ℹ️ Sobre este Dashboard
+Este panel compara distintos modelos de predicción mensual de facturación con base en una serie histórica.
+
+#### 🧮 Serie tratada
+Es una versión depurada de la serie original, donde se han corregido valores atípicos (picos o caídas inusuales) para mejorar la calidad de las predicciones. Esto permite que los modelos aprendan mejor el comportamiento regular de los datos.
+
+#### 📈 SARIMA (Seasonal ARIMA)
+Modelo estadístico que combina **tendencias**, **estacionalidad** y **ruido aleatorio**. Es ideal para series temporales estacionales y asume que los patrones del pasado se repiten en el futuro. No requiere gran poder computacional.
+
+#### 🧠 LSTM (Long Short-Term Memory)
+Es un tipo de red neuronal recurrente (Modelo AI) diseñada para aprender dependencias de largo plazo. Es especialmente útil cuando existen patrones complejos en el tiempo. Requiere entrenamiento previo y recursos computacionales más elevados.
+
+#### 📋 Prophet
+Desarrollado por Meta Facebook, este modelo es intuitivo, flexible. Captura bien los **cambios abruptos**, **estacionalidades múltiples** y **festividades**. Ideal para automatizar procesos de forecasting.
+""")
