@@ -90,7 +90,7 @@ fig_modelos.add_trace(go.Scatter(
     y=serie[serie.index >= pd.to_datetime(fecha_inicio_comparacion)]['total'],
     mode='lines',
     name='Serie original',
-    line=dict(color='rgba(72, 247, 249)', dash='dot')
+    line=dict(color='rgb(136, 115, 108)', dash='dot')
 ))
 
 # SARIMA
@@ -117,6 +117,22 @@ if mostrar_sarima:
         hoverinfo="skip",
         showlegend=True,
         name="Confianza SARIMA"
+    ))
+# LSTM
+if mostrar_lstm:
+    modelo_lstm = LSTMModel(
+        model_path="models/modelo_multistep_mensual.keras",
+        scaler_path="models/multistep_mensual_scaler_total.pkl",
+        input_length=12,
+        output_length=6
+    )
+    pred_lstm = modelo_lstm.predecir(serie_tratada, fecha_limite=fecha_limite_max)
+    fig_modelos.add_trace(go.Scatter(
+        x=pred_lstm.index,
+        y=pred_lstm['prediccion'],
+        name="Predicción LSTM",
+        mode="lines+markers",
+        line=dict(color='rgb(224, 245, 49)', dash='dot')
     ))
 
 fig_modelos.update_layout(
