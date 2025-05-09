@@ -134,6 +134,31 @@ if mostrar_lstm:
         mode="lines+markers",
         line=dict(color='rgb(224, 245, 49)', dash='dot')
     ))
+# Prophet
+if mostrar_prophet:
+    df_prophet = serie_tratada.reset_index().rename(columns={'fecha': 'ds', 'total': 'y'})
+    modelo_prophet = ProphetModel()
+    modelo_prophet.entrenar(df_prophet)
+    forecast = modelo_prophet.predecir(n_periodos=6)
+    forecast_filtrado = forecast[forecast.index >= fecha_limite_max]
+
+    fig_modelos.add_trace(go.Scatter(
+        x=forecast_filtrado.index,
+        y=forecast_filtrado['yhat'],
+        name="Predicción Prophet",
+        mode="lines+markers",
+        line=dict(color='rgba(114, 192, 245, 0.8)')
+    ))
+    fig_modelos.add_trace(go.Scatter(
+        x=forecast_filtrado.index.tolist() + forecast_filtrado.index[::-1].tolist(),
+        y=forecast_filtrado['yhat_lower'].tolist() + forecast_filtrado['yhat_upper'][::-1].tolist(),
+        fill='toself',
+        fillcolor='rgba(114, 192, 245, 0.3)',
+        line=dict(color='rgba(255,255,255,0)'),
+        hoverinfo="skip",
+        showlegend=True,
+        name="Confianza Prophet"
+    ))
 
 fig_modelos.update_layout(
     title="📊 Comparación de predicciones por modelo",
